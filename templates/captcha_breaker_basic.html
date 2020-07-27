@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %} Captcha-Breaker Basic {% endblock %}
+
+{% block style %}
+
+<style>
+    .card{
+        width: 25rem;
+    }
+    .btn{
+        width: 100%;
+    }
+</style>
+
+{% endblock %}
+
+
+
+
+
+{% block content %}
+
+<div class="container-fluid padding">
+    <div class="row padding">
+
+        <!--Left side of page (Try it yourself)-->
+
+        <div class="col-md-4">
+            <div class="card padding">
+                <div class="card-body">
+                    <h4 class="card-title text-center"> Try it yourself! </h4>
+                    <p class="card-text"> First generate a random captcha image and then click on predict to break the
+                        captch!</p>
+
+                    <form action="/uploader" name="form1" method="POST" enctype="multipart/form-data"
+                        onsubmit="return validateForm()">
+                        <label for="get_random_img" class="btn btn-primary btn-lg text-center"  id="get_random_img">Generate random
+                            captcha
+                            image</label>
+                        <input type="button" name="get_random_img"  id="get_random_img" style="visibility:hidden;"
+                            onchange="return validateImage()">
+
+
+
+                        <input type="submit" value="Predict" name="submit" class="btn btn-primary btn-lg text-center">
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Right side of page-->
+
+        <div class="col-md-8">
+            <h1> Explanation here!</h1>
+            <button> Click to hide</button>
+        </div>
+
+    </div>
+</div>
+</div>
+
+
+<!--Javascipt and jQuery code-->
+{% block script %}
+
+<script>
+    function validateForm() {
+        var empt = document.forms["form1"]["get_random_img"].value;
+        if (empt == "") {
+            alert("Please upload an image");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    function validateImage() {
+        var formData = new FormData();
+
+        var file = document.getElementById("fileToUpload").files[0];
+
+        formData.append("Filedata", file);
+        var t = file.type.split('/').pop().toLowerCase();
+        if (t != "jpeg" && t != "jpg" && t != "png" && t != "bmp") {
+            alert('Please select a valid image');
+            document.getElementById("get_random_img").value = '';
+            return false;
+        }
+        else return true;
+    }
+
+    $(document).ready(function () {
+        $("button").on("click", function(){
+            $("h1").hide();
+        });
+
+        $("#get_random_img").click(function(){
+            console.log("entering ajax");
+            $.ajax({url: "get_image", 
+                    type: "GET", 
+                    success: function(result){
+                        console.log("inside succes");
+                    }})
+        });
+    });
+
+    
+
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- dividing the page into two sections using 2 divs
+<div class="row padding">
+<div class="col-lg-3 col-sm-6 padding-left">
+    <div class="conatiner-fluid padding">
+            <div class="row padding">
+            <form action="/uploader" method="POST" enctype="multipart/form-data">
+                
+                <label for="image_random" class="btn btn-primary">Click to generate random image</label>
+                    <input type="file" name="image_random" id="image_random" style="visibility:hidden;">
+                
+                <label for="image_user" class="btn btn-primary">Click to upload image</label>
+                    <input type="file" name="image_user" id="image_user" style="visibility:hidden;">
+                
+                    <input class="btn btn-primary" type="submit" value="Submit" name="submit" id="submitFiles">
+            </form>
+    
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-9 col-sm-6 conatiner-fluid padding ">
+    <h1> Here comes the explanations!</h1>
+</div>
+</div>
+
+<br> <br> -->
+
+
+{% endblock %}

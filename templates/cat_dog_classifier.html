@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %} Cat-Dog Classifier {% endblock %}
+
+{% block content %}
+
+<div class="container-fluid padding">
+    <div class="row padding">
+        <div class="col-md-4">
+            <div class="card padding" style="width:18rem">
+                <div class="card-body">
+                    <h4 class="card-title text-center"> Try it yourself! </h4>
+                    <p class="card-text"> Upload an image of a cat or a dog ad my classifier will intelligiently
+                        classify it correctly.</p>
+
+                    <form action="/uploader" name="form1" method="POST" enctype="multipart/form-data"
+                        onsubmit="return validateForm()">
+                        <label for="fileToUpload" class="btn btn-primary text-center" style="width:97%">Click to upload
+                            image</label>
+                        <input type="file" name="fileToUpload" id="fileToUpload" style="visibility:hidden;"
+                            onchange="return validateImage()">
+
+                        <!--<input type="file" name="fileToUpload" id="fileToUpload" class="btn btn-primary btn-lg" >-->
+                        <br><br>
+                        <input type="submit" value="Classify" name="submit" class="btn btn-primary btn-lg text-center"
+                            style="width:97%">
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <h1> Explanation here!</h1>
+        </div>
+
+    </div>
+</div>
+</div>
+
+
+<script>
+    function validateForm() {
+        var empt = document.forms["form1"]["fileToUpload"].value;
+        if (empt == "") {
+            alert("Please upload an image");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    function validateImage() {
+        var formData = new FormData();
+
+        var file = document.getElementById("fileToUpload").files[0];
+
+        formData.append("Filedata", file);
+        var t = file.type.split('/').pop().toLowerCase();
+        if (t != "jpeg" && t != "jpg" && t != "png" && t != "bmp") {
+            alert('Please select a valid image file');
+            document.getElementById("img").value = '';
+            return false;
+        }
+        else return true;
+    }
+
+
+</script>
+
+
+{% endblock %}
